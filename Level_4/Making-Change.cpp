@@ -1,9 +1,10 @@
-// DP solution, runs in O(coins * amount)
+#include <algorithm>
 int make_change(int coins[], int n, int amount)
 {
     if(amount < 0) return 0;
     
     int combinations[amount + 1];
+    fill_n(combinations, amount + 1, 0); //initialize array with zeroes
     combinations[0] = 1;
     
     for(int coin = 0; coin < n; coin++)
