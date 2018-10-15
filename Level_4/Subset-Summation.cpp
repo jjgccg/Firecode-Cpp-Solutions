@@ -1,42 +1,41 @@
-bool group_sum_with_num(int arr[], int sz, int must_have, int target_sum)
+bool groupSum(int arr[], int size, int target)
 {
-    if(sz == 0) return false;
-    
-    // ROWS: elements inside of set
-    // COLS: 0...sum 
-    bool setAndSum[sz + 1][target_sum + 1];
-    
+    if(size == 0) return false;
+
+    //ROWS: elements inside of the set
+    //COLS: 0...sum
+    bool setAndSum[size + 1][target + 1];
+
     /* Initialize first column with TRUE, since the
-       empty set is a subset of each element */
-    for(int row = 0; row < sz - 1; row++)
+    empty set is a subset of each element */
+    for(int row = 0; row < size - 1; row++)
     {
         setAndSum[row][0] = true;
     }
-    
+
     /* Initialize each number in sum row that is not 0 with False,
-       since the subset [0] will sum to none of these.*/
-    for(int col = 1; col < target_sum + 1; col++)
+    since the subset [0] will sum to none of these.*/
+    for(int col = 1; col < target + 1; col++)
     {
         setAndSum[0][col] = false;
     }
-    
-    /* First row and column filled out, start with i=1, j=1 */
-    for(int i = 1; i <= sz; i++)
+
+    for(int setVal = 1; setVal <= size; setVal++)
     {
-        for(int j = 1; j <= target_sum; j++)
+        for(int curTarget = 1; curTarget <= target; j++)
         {
-            /* QUESTION: Is there a subset previous to current value which equals
-               the target sum, OR does the currentSum - currentSetVal work?*/
-            if(j < arr[i - 1])
+            // 1) Is there a subset previous to the current value which
+            // equals the target sum?
+            // 2) Does the current sum - current value in the set work?
+            if(curTarget < arr[curTarget - 1])
             {
-                setAndSum[i][j] = setAndSum[i - 1][j];
+                setAndSum[setVal][curTarget] = setAndSum[setVal - 1][curTarget];
             }
-            if(j >= arr[i - 1])
+            if(curTarget >= arr[curTarget - 1])
             {
-                setAndSum[i][j] = setAndSum[i - 1][j] || setAndSum[i - 1][j - arr[i - 1]];
+                setAndSum[setVal][curTarget] = setAndSum[setVal - 1][curTarget] || 
+                                               setAndSum[setVal - 1][curTarget - arr[setVal - 1]];
             }
         }
     }
-    
-    return setAndSum[sz][target_sum];
 }
